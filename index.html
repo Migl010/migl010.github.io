@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MigliTools - Tienda Gamer y Configurador de PCs de Lujo</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        neonBlue: '#00f3ff',
+                        neonDeep: '#0a1128',
+                        neonDark: '#050814',
+                        neonCard: '#0f172a',
+                    },
+                    boxShadow: {
+                        'neon': '0 0 20px rgba(0, 243, 255, 0.4)',
+                        'neon-lg': '0 0 35px rgba(0, 243, 255, 0.7)',
+                        'neon-glow': '0 0 10px rgba(0, 243, 255, 0.8), inset 0 0 10px rgba(0, 243, 255, 0.3)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@500;600;700&display=swap');
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: #050814;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .font-orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+        }
+
+        .glass-panel:hover {
+            border-color: rgba(0, 243, 255, 0.6);
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.25);
+        }
+
+        .neon-text {
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.7), 0 0 20px rgba(0, 243, 255, 0.5);
+        }
+
+        .neon-border {
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+            border: 1px solid #00f3ff;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050814;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #00f3ff;
+            border-radius: 4px;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.8; filter: drop-shadow(0 0 15px rgba(0,243,255,0.6)); }
+            50% { opacity: 1; filter: drop-shadow(0 0 30px rgba(0,243,255,0.9)); }
+        }
+
+        .animate-pulse-glow {
+            animation: pulseGlow 3s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-neonDark text-white antialiased selection:bg-neonBlue selection:text-black">
+
+    <!-- Header / Navegación -->
+    <header class="fixed top-0 left-0 w-full z-50 glass-panel border-b border-neonBlue/30 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="#" class="flex items-center space-x-3 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-neonBlue to-blue-900 flex items-center justify-center neon-border group-hover:scale-105 transition-transform">
+                    <i class="fa-solid fa-microchip text-black text-xl"></i>
+                </div>
+                <div>
+                    <span class="text-2xl font-black font-orbitron tracking-wider text-white neon-text">MIGLI<span class="text-neonBlue">TOOLS</span></span>
+                    <span class="block text-[10px] tracking-widest text-neonBlue/80 uppercase">Ultimate Gaming Hardware</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden lg:flex items-center space-x-8 font-semibold text-lg">
+                <a href="#pcs" class="hover:text-neonBlue transition-colors">PCs Gaming</a>
+                <a href="#configurador" class="hover:text-neonBlue transition-colors">Configurador</a>
+                <a href="#ps5" class="hover:text-neonBlue transition-colors">PS5 Custom</a>
+                <a href="#mandos" class="hover:text-neonBlue transition-colors">Mandos Lujo</a>
+                <a href="#laptops" class="hover:text-neonBlue transition-colors">Laptops</a>
+                <a href="#resenas" class="hover:text-neonBlue transition-colors">Reseñas</a>
+            </nav>
+
+            <!-- Actions (Cart & Mobile Toggle) -->
+            <div class="flex items-center space-x-4">
+                <button onclick="toggleCart()" class="relative p-3 rounded-xl glass-panel hover:bg-neonBlue/20 text-neonBlue transition-all flex items-center justify-center">
+                    <i class="fa-solid fa-cart-shopping text-xl"></i>
+                    <span id="cart-count" class="absolute -top-1 -right-1 bg-neonBlue text-black text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-neon">0</span>
+                </button>
+                <button onclick="toggleMobileMenu()" class="lg:hidden p-3 rounded-xl glass-panel text-neonBlue">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden glass-panel border-t border-neonBlue/20 px-6 py-4 space-y-3">
+            <a href="#pcs" onclick="toggleMobileMenu()" class="block py-2 hover:text-neonBlue">PCs Gaming</a>
+            <a href="#configurador" onclick="toggleMobileMenu()" class="block py-2 hover:text-neonBlue">Configurador</a>
+            <a href="#ps5" onclick="toggleMobileMenu()" class="block py-2 hover:text-neonBlue">PS5 Custom</a>
+            <a href="#mandos" onclick="toggleMobileMenu()" class="block py-2 hover:text-neonBlue">Mandos Lujo</a>
+            <a href="#laptops" onclick="toggleMobileMenu()" class="block py-2 hover:text-neonBlue">Laptops</a>
+            <a href="#resenas" onclick="toggleMobileMenu()" class="block py-2 hover:text-neonBlue">Reseñas</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center pt-28 pb-16 px-4 overflow-hidden">
+        <!-- Background Glow Orbs -->
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-neonBlue/20 rounded-full blur-[120px] pointer-events-none"></div>
+        <div class="absolute bottom-10 right-10 w-80 h-80 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+            <div class="space-y-6 text-center lg:text-left">
+                <div class="inline-flex items-center space-x-2 px-4 py-2 rounded-full glass-panel border border-neonBlue/40 text-neonBlue text-sm font-semibold animate-pulse-glow">
+                    <i class="fa-solid fa-gem text-xs"></i>
+                    <span>Edición Limitada 2026 - Lujo & Rendimiento Extremo</span>
+                </div>
+                <h1 class="text-4xl sm:text-6xl font-black font-orbitron tracking-tight leading-tight">
+                    DOMINA EL JUEGO CON <span class="text-transparent bg-clip-text bg-gradient-to-r from-neonBlue via-white to-blue-400 neon-text">PODER ABSOLUTO</span>
+                </h1>
+                <p class="text-gray-300 text-lg sm:text-xl font-normal max-w-xl mx-auto lg:mx-0">
+                    Hardware de gama ultra-alta personalizado con detalles en oro real, plata y diamantes. Construimos las máquinas más potentes del planeta para gamers exigentes.
+                </p>
+                <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+                    <a href="#configurador" class="w-full sm:w-auto px-8 py-4 bg-neonBlue text-black font-orbitron font-bold rounded-xl shadow-neon hover:bg-white hover:shadow-neon-lg transition-all text-center">
+                        Configura tu bestia
+                    </a>
+                    <a href="#pcs" class="w-full sm:w-auto px-8 py-4 glass-panel text-white font-orbitron font-bold rounded-xl hover:bg-neonBlue/10 transition-all text-center border border-neonBlue/40">
+                        Ver Modelos VIP
+                    </a>
+                </div>
+                <div class="grid grid-cols-3 gap-4 pt-6 border-t border-neonBlue/20">
+                    <div>
+                        <h4 class="text-2xl font-black font-orbitron text-neonBlue">RTX 5090</h4>
+                        <p class="text-xs text-gray-400">Potencia Máxima</p>
+                    </div>
+                    <div>
+                        <h4 class="text-2xl font-black font-orbitron text-neonBlue">256 GB</h4>
+                        <p class="text-xs text-gray-400">RAM DDR5 Real</p>
+                    </div>
+                    <div>
+                        <h4 class="text-2xl font-black font-orbitron text-neonBlue">Oro & Gemas</h4>
+                        <p class="text-xs text-gray-400">Acabados Reales</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Graphic / Showcase -->
+            <div class="relative flex justify-center">
+                <div class="relative w-full max-w-lg aspect-square rounded-3xl glass-panel p-6 flex flex-col items-center justify-center group overflow-hidden neon-border">
+                    <div class="absolute inset-0 bg-gradient-to-t from-neonDeep via-transparent to-transparent opacity-80 z-10"></div>
+                    <img src="https://placehold.co/600x600/0a1128/00f3ff?text=MigliTools+Titanium+Elite" alt="PC Gaming Lujo" class="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition-transform duration-500 relative z-0">
+                    <div class="absolute bottom-8 left-8 right-8 z-20 flex justify-between items-end bg-neonDark/80 backdrop-blur-md p-4 rounded-xl border border-neonBlue/30">
+                        <div>
+                            <span class="text-xs text-neonBlue font-semibold uppercase tracking-wider">La Joya de la Corona</span>
+                            <h3 class="text-xl font-bold font-orbitron text-white">MigliTools Diamond Edition</h3>
+                        </div>
+                        <span class="text-2xl font-black font-orbitron text-neonBlue">20.000€</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de PCs Gaming -->
+    <section id="pcs" class="py-24 px-4 max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+            <span class="text-neonBlue text-sm font-semibold uppercase tracking-widest">Hardware de Élite</span>
+            <h2 class="text-3xl sm:text-5xl font-black font-orbitron mt-2">PCS GAMING EXCLUSIVAS</h2>
+            <p class="text-gray-400 max-w-2xl mx-auto mt-3">Equipos ensamblados a mano con disipadores de oro real, detalles en plata y la potencia tecnológica más avanzada del mercado.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- PC 1: La Joya de la Corona -->
+            <div class="glass-panel rounded-3xl p-6 relative overflow-hidden border-2 border-neonBlue shadow-neon-lg flex flex-col justify-between group">
+                <div class="absolute top-4 right-4 bg-neonBlue text-black font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider shadow-neon">
+                    ¡Solo 1 en el mundo!
+                </div>
+                <div>
+                    <div class="relative h-64 rounded-2xl overflow-hidden mb-6">
+                        <img src="https://placehold.co/600x400/0a1128/00f3ff?text=Diamond+Gold+Edition+i9" alt="PC Diamond Edition" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-neonDark/90 via-transparent to-transparent"></div>
+                    </div>
+                    <span class="text-xs font-semibold text-neonBlue uppercase">Exclusiva Limitada con Diamante Real</span>
+                    <h3 class="text-2xl font-bold font-orbitron mt-1 text-white">MigliTools Apex Diamond</h3>
+                    <p class="text-gray-300 text-sm mt-2">Chasis incrustado de diamante real y oro de 24 kilates. Refrigeración líquida personalizada con bloques de plata pura.</p>
+                    <ul class="mt-4 space-y-2 text-sm text-gray-300 border-t border-neonBlue/20 pt-4">
+                        <li><i class="fa-solid fa-microchip text-neonBlue mr-2"></i> Intel Core i9 14th Gen</li>
+                        <li><i class="fa-solid fa-gamepad text-neonBlue mr-2"></i> NVIDIA RTX 5090 32GB</li>
+                        <li><i class="fa-solid fa-memory text-neonBlue mr-2"></i> 256 GB RAM DDR5 (Kit Colección Oro)</li>
+                        <li><i class="fa-solid fa-hard-drive text-neonBlue mr-2"></i> 16TB NVMe Gen5 Hyper-Speed</li>
+                    </ul>
+                </div>
+                <div class="mt-8 pt-4 border-t border-neonBlue/20 flex items-center justify-between">
+                    <div>
+                        <span class="text-xs text-gray-400 block">Precio Exclusivo</span>
+                        <span class="text-3xl font-black font-orbitron text-neonBlue">20.000 €</span>
+                    </div>
+                    <button onclick="addToCart('MigliTools Apex Diamond', 20000, 'https://placehold.co/600x400/0a1128/00f3ff?text=Diamond+Gold+Edition+i9')" class="px-6 py-3 bg-neonBlue text-black font-orbitron font-bold rounded-xl shadow-neon hover:bg-white transition-all">
+                        Comprar
+                    </button>
+                </div>
+            </div>
+
+            <!-- PC 2: Gama Alta Oro -->
+            <div class="glass-panel rounded-3xl p-6 relative overflow-hidden flex flex-col justify-between group">
+                <div>
+                    <div class="relative h-64 rounded-2xl overflow-hidden mb-6">
+                        <img src="https://placehold.co/600x400/0f172a/00f3ff?text=Gold+Edition+i9" alt="PC Gold Edition" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-neonDark/90 via-transparent to-transparent"></div>
+                    </div>
+                    <span class="text-xs font-semibold text-neonBlue uppercase">Gama Alta con Detalles en Oro Real</span>
+                    <h3 class="text-2xl font-bold font-orbitron mt-1 text-white">MigliTools Aureus Pro</h3>
+                    <p class="text-gray-300 text-sm mt-2">Placa base con detalles bañados en oro y un rendimiento brutal para streaming y renderizado 8K.</p>
+                    <ul class="mt-4 space-y-2 text-sm text-gray-300 border-t border-neonBlue/20 pt-4">
+                        <li><i class="fa-solid fa-microchip text-neonBlue mr-2"></i> Intel Core i9 14th Gen</li>
+                        <li><i class="fa-solid fa-gamepad text-neonBlue mr-2"></i> NVIDIA RTX 4090 24GB</li>
+                        <li><i class="fa-solid fa-memory text-neonBlue mr-2"></i> 128 GB RAM DDR5</li>
+                        <li><i class="fa-solid fa-hard-drive text-neonBlue mr-2"></i> 8TB NVMe Gen4</li>
+                    </ul>
+                </div>
+                <div class="mt-8 pt-4 border-t border-neonBlue/20 flex items-center justify-between">
+                    <div>
+                        <span class="text-xs text-gray-400 block">Precio</span>
+                        <span class="text-3xl font-black font-orbitron text-neonBlue">5.499 €</span>
+                    </div>
+                    <button onclick="addToCart('MigliTools Aureus Pro', 5499, 'https://placehold.co/600x400/0f172a/00f3ff?text=Gold+Edition+i9')" class="px-6 py-3 glass-panel border border-neonBlue text-neonBlue font-orbitron font-bold rounded-xl hover:bg-neonBlue hover:text-black transition-all">
+                        Comprar
+                    </button>
+                </div>
+            </div>
+
+            <!-- PC 3: Gama Media-Alta -->
+            <div class="glass-panel rounded-3xl p-6 relative overflow-hidden flex flex-col justify-between group">
+                <div>
+                    <div class="relative h-64 rounded-2xl overflow-hidden mb-6">
+                        <img src="https://placehold.co/600x400/0f172a/ffffff?text=Neon+Silver+i7" alt="PC Silver Edition" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-neonDark/90 via-transparent to-transparent"></div>
+                    </div>
+                    <span class="text-xs font-semibold text-neonBlue uppercase">Rendimiento Extremo & Plata Real</span>
+                    <h3 class="text-2xl font-bold font-orbitron mt-1 text-white">MigliTools Argentum</h3>
+                    <p class="text-gray-300 text-sm mt-2">Disipadores de calor con aleación de plata real y componentes optimizados para gaming competitivo a máxima tasa de refresco.</p>
+                    <ul class="mt-4 space-y-2 text-sm text-gray-300 border-t border-neonBlue/20 pt-4">
+                        <li><i class="fa-solid fa-microchip text-neonBlue mr-2"></i> Intel Core i7 14th Gen</li>
+                        <li><i class="fa-solid fa-gamepad text-neonBlue mr-2"></i> NVIDIA RTX 4070 Ti Super</li>
+                        <li><i class="fa-solid fa-memory text-neonBlue mr-2"></i> 64 GB RAM DDR5</li>
+                        <li><i class="fa-solid fa-hard-drive text-neonBlue mr-2"></i> 4TB NVMe Gen4</li>
+                    </ul>
+                </div>
+                <div class="mt-8 pt-4 border-t border-neonBlue/20 flex items-center justify-between">
+                    <div>
+                        <span class="text-xs text-gray-400 block">Precio</span>
+                        <span class="text-3xl font-black font-orbitron text-neonBlue">2.899 €</span>
+                    </div>
+                    <button onclick="addToCart('MigliTools Argentum', 2899, 'https://placehold.co/600x400/0f172a/ffffff?text=Neon+Silver+i7')" class="px-6 py-3 glass-panel border border-neonBlue text-neonBlue font-orbitron font-bold rounded-xl hover:bg-neonBlue hover:text-black transition-all">
+                        Comprar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Configurador de PCs (Montarte una) -->
+    <section id="configurador" class="py-24 px-4 bg-gradient-to-b from-neonDark via-neonDeep to-neonDark border-y border-neonBlue/20">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="text-neonBlue text-sm font-semibold uppercase tracking-widest">Personalización Total</span>
+                <h2 class="text-3xl sm:text-5xl font-black font-orbitron mt-2">CONFIGURA TU PROPIA BESTIA</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto mt-3">Selecciona los componentes de máxima categoría. Añade detalles de oro, plata o la exclusiva gema de diamante.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Opciones de Configuración -->
+                <div class="lg:col-span-2 glass-panel rounded-3xl p-6 sm:p-8 space-y-8">
+                    <!-- CPU -->
+                    <div>
+                        <label class="block text-sm font-orbitron font-bold text-neonBlue mb-3">1. Procesador (CPU)</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <label class="config-option border border-neonBlue/30 rounded-2xl p-4 cursor-pointer hover:border-neonBlue transition-all bg-neonDark/50 flex items-center space-x-3">
+                                <input type="radio" name="cpu" value="799" data-name="Intel Core i7 14700KF" class="accent-neonBlue" checked onchange="updateConfigPrice()">
+                                <div>
+                                    <span class="block font-bold text-white">Intel Core i7 14700KF</span>
+                                    <span class="text-xs text-neonBlue">+799 €</span>
+                                </div>
+                            </label>
+                            <label class="config-option border border-neonBlue/30 rounded-2xl p-4 cursor-pointer hover:border-neonBlue transition-all bg-neonDark/50 flex items-center space-x-3">
+                                <input type="radio" name="cpu" value="1299" data-name="Intel Core i9 14900KS" class="accent-neonBlue" onchange="updateConfigPrice()">
+                                <div>
+                                    <span class="block font-bold text-white">Intel Core i9 14900KS</span>
+                                    <span class="text-xs text-neonBlue">+1.299 €</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- GPU -->
+                    <div>
+                        <label class="block text-sm font-orbitron font-bold text-neonBlue mb-3">2. Tarjeta Gráfica (GPU)</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <label class="config-option border border-neonBlue/30 rounded-2xl p-4 cursor-pointer hover:border-neonBlue transition-all bg-neonDark/50 flex items-center space-x-3">
+                                <input type="radio" name="gpu" value="1899" data-name="NVIDIA RTX 4080 Super" class="accent-neonBlue" checked onchange="updateConfigPrice()">
+                                <div>
+                                    <span class="block font-bold text-white">NVIDIA RTX 4080 Super</span>
+                                    <span class="text-xs text-neonBlue">+1.899 €</span>
+                                </div>
+                            </label>
+                            <label class="config-option border border-neonBlue/30 rounded-2xl p-4 cursor-pointer hover:border-neonBlue transition-all bg-neonDark/50 flex items-center space-x-3">
+                                <input type="radio" name="gpu" value="3499" data-name="NVIDIA RTX 5090 Extreme" class="accent-neonBlue" onchange="updateConfigPrice()">
+                                <div>
+                                    <span class="block font-bold text-white">NVIDIA RTX 5090 Extreme</span>
+                                    <span class="text-xs text-neonBlue">+3.499 €</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- RAM -->
+                    <div>
+                        <label class="block text-sm font-orbitron font-bold text-neonBlue mb-3">3. Memoria RAM DDR5</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <label class="config-option border border-neonBlue/30 rounded-2xl p-4 cursor-pointer hover:border-neonBlue transition-all bg-neonDark/50 flex items-center space-x-3">
+                                <input type="radio" name="ram" value="399" data-name="64 GB RAM DDR5" class="accent-neonBlue" checked onchange="updateConfigPrice()">
+                                <div>
+                                    <span class="block font-bold text-white">64 GB</span>
+                                    <span class="text-xs text-neonBlue">+399 €</span>
+                                </div>
+                            </label>
+                            <label class="config-option border border-neonBlue/30 rounded-2xl p-4 cursor-pointer hover:border-neonBlue transition-all bg-neonDark/50 flex items-center space-x-3">
+                                <input type="radio" name="ram" value="799" data-name="128 GB RAM DDR5" class="accent-neonBlue" onchange="updateConfigPrice()">
+                                <div>
+                                    <span class="block font-bold text-white">128 GB</span>
+                                    <span class="text-xs text-neonBlue">+799 €</span>
+                                </div>
+                            </label>
+                            <label class="config-option border border-neonBlue/30 rounded-2xl p-4 cursor-pointer hover:border-neonBlue transition-all bg-neonDark/50 flex items-center space-x-3">
+                                <input type="radio" name="ram" value="1599" data-name="256 GB RAM DDR5 (Edición Oro)" class="accent-neonBlue" onchange="updateConfigPrice()">
+                                <div>
+                                    <span class="block font-bold text-white">256 GB (Oro)</span>
+                                    <span class="text-xs text-neonBlue">+1.599 €</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Extras de Lujo -->
+                    <div>
+                        <label class="block text-sm font-orbitron font-bold text-neonBlue mb-3">4. Acabados y Detalles de Lujo</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <label class="config-option border border-neonBlue/30 rounded-2xl p-4 cursor-pointer hover:border-neonBlue transition-all bg-neonDark/50 flex items-center space-x-3">
+                                <input type="checkbox" name="extra" value="500" data-name="Detalles en Plata Real" class="accent-neonBlue" onchange="updateConfigPrice()">
+                                <div>
+                                    <span class="block font-bold text-white">Plata Real</span>
+                                    <span class="text-xs text-neonBlue">+500 €</span>
+                                </div>
+                            </label>
+                            <label class="config-option border border-neonBlue/30 rounded-2xl p-4 cursor-pointer hover:border-neonBlue transition-all bg-neonDark/50 flex items-center space-x-3">
+                                <input type="checkbox" name="extra" value="1500" data-name="Baño de Oro 24k" class="accent-neonBlue" onchange="updateConfigPrice()">
+                                <div>
+                                    <span class="block font-bold text-white">Oro 24k</span>
+                                    <span class="text-xs text-neonBlue">+1.500 €</span>
+                                </div>
+                            </label>
+                            <label class="config-option border border-neonBlue/30 rounded-2xl p-4 cursor-pointer hover:border-neonBlue transition-all bg-neonDark/50 flex items-center space-x-3">
+                                <input type="checkbox" name="extra" value="8000" data-name="Incrustación de Diamante Real" class="accent-neonBlue" onchange="updateConfigPrice()">
+                                <div>
+                                    <span class="block font-bold text-white">Diamante Real</span>
+                                    <span class="text-xs text-neonBlue">+8.000 €</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resumen de Configuración -->
+                <div class="glass-panel rounded-3xl p-6 sm:p-8 flex flex-col justify-between border border-neonBlue/40 h-fit sticky top-28">
+                    <div>
+                        <h3 class="text-xl font-bold font-orbitron text-white mb-4">Resumen de tu PC Custom</h3>
+                        <ul id="config-summary" class="space-y-3 text-sm text-gray-300 border-b border-neonBlue/20 pb-6 mb-6">
+                            <li class="flex justify-between"><span>CPU:</span> <span id="summary-cpu" class="text-neonBlue font-semibold">Intel Core i7 14700KF</span></li>
+                            <li class="flex justify-between"><span>GPU:</span> <span id="summary-gpu" class="text-neonBlue font-semibold">NVIDIA RTX 4080 Super</span></li>
+                            <li class="flex justify-between"><span>RAM:</span> <span id="summary-ram" class="text-neonBlue font-semibold">64 GB RAM DDR5</span></li>
+                            <li class="flex justify-between"><span>Extras:</span> <span id="summary-extras" class="text-neonBlue font-semibold">Ninguno</span></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="text-gray-400 font-bold">Total Estimado</span>
+                            <span id="config-total" class="text-3xl font-black font-orbitron text-neonBlue">3.097 €</span>
+                        </div>
+                        <button onclick="addCustomToCart()" class="w-full py-4 bg-neonBlue text-black font-orbitron font-bold rounded-xl shadow-neon hover:bg-white transition-all">
+                            Añadir Configuración al Carrito
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de PS5 Custom -->
+    <section id="ps5" class="py-24 px-4 max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+            <span class="text-neonBlue text-sm font-semibold uppercase tracking-widest">Edición Coleccionista</span>
+            <h2 class="text-3xl sm:text-5xl font-black font-orbitron mt-2">PS5 CUSTOM DE LUJO</h2>
+            <p class="text-gray-400 max-w-2xl mx-auto mt-3">Consolas personalizadas con placas laterales acabadas en oro, fibra de carbono y sistemas de refrigeración modificados.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- PS5 1 -->
+            <div class="glass-panel rounded-3xl p-6 flex flex-col sm:flex-row gap-6 items-center group">
+                <div class="w-full sm:w-1/2 h-64 rounded-2xl overflow-hidden relative">
+                    <img src="https://placehold.co/400x400/0a1128/00f3ff?text=PS5+Gold+Edition" alt="PS5 Gold" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="w-full sm:w-1/2 space-y-4">
+                    <span class="text-xs font-semibold text-neonBlue uppercase">Placas Bañadas en Oro</span>
+                    <h3 class="text-2xl font-bold font-orbitron text-white">PS5 Pro Aureus Edition</h3>
+                    <p class="text-gray-300 text-sm">Consola PS5 Pro personalizada con acabados en oro de 18k y mando a juego con empuñadura de cuero noble.</p>
+                    <div class="flex items-center justify-between pt-2">
+                        <span class="text-2xl font-black font-orbitron text-neonBlue">1.499 €</span>
+                        <button onclick="addToCart('PS5 Pro Aureus Edition', 1499, 'https://placehold.co/400x400/0a1128/00f3ff?text=PS5+Gold+Edition')" class="px-5 py-2.5 bg-neonBlue text-black font-orbitron font-bold rounded-xl text-sm shadow-neon hover:bg-white transition-all">
+                            Comprar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PS5 2 -->
+            <div class="glass-panel rounded-3xl p-6 flex flex-col sm:flex-row gap-6 items-center group">
+                <div class="w-full sm:w-1/2 h-64 rounded-2xl overflow-hidden relative">
+                    <img src="https://placehold.co/400x400/0f172a/ffffff?text=PS5+Carbon+Silver" alt="PS5 Carbon" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="w-full sm:w-1/2 space-y-4">
+                    <span class="text-xs font-semibold text-neonBlue uppercase">Fibra de Carbono & Plata</span>
+                    <h3 class="text-2xl font-bold font-orbitron text-white">PS5 Pro Carbon Silver</h3>
+                    <p class="text-gray-300 text-sm">Diseño aerodinámico inspirado en hiperdeportivos con detalles en plata y fibra de carbono auténtica.</p>
+                    <div class="flex items-center justify-between pt-2">
+                        <span class="text-2xl font-black font-orbitron text-neonBlue">1.199 €</span>
+                        <button onclick="addToCart('PS5 Pro Carbon Silver', 1199, 'https://placehold.co/400x400/0f172a/ffffff?text=PS5+Carbon+Silver')" class="px-5 py-2.5 glass-panel border border-neonBlue text-neonBlue font-orbitron font-bold rounded-xl text-sm hover:bg-neonBlue hover:text-black transition-all">
+                            Comprar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mandos de Lujo (Car Edition) -->
+    <section id="mandos" class="py-24 px-4 bg-gradient-to-b from-neonDark via-neonDeep to-neonDark border-y border-neonBlue/20">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="text-neonBlue text-sm font-semibold uppercase tracking-widest">Inspiración Automotriz</span>
+                <h2 class="text-3xl sm:text-5xl font-black font-orbitron mt-2">MANDOS DE LUJO - CAR EDITION</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto mt-3">Mandos inalámbricos de precisión profesional con nombres y acabados inspirados en coches de lujo y superdeportivos.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Mando 1 -->
+                <div class="glass-panel rounded-3xl p-6 flex flex-col justify-between group">
+                    <div>
+                        <div class="relative h-48 rounded-2xl overflow-hidden mb-4">
+                            <img src="https://placehold.co/400x300/0a1128/00f3ff?text=Bugatti+Chiron" alt="Bugatti Chiron Edition" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <span class="text-xs text-neonBlue font-semibold uppercase">Edición Hiperauto</span>
+                        <h3 class="text-xl font-bold font-orbitron text-white mt-1">Bugatti Chiron Edition</h3>
+                        <p class="text-gray-300 text-xs mt-2">Gatillos metálicos ajustables, empuñadura de Alcántara real y detalles en plata.</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-neonBlue/20 flex items-center justify-between">
+                        <span class="text-xl font-black font-orbitron text-neonBlue">299 €</span>
+                        <button onclick="addToCart('Mando Bugatti Chiron Edition', 299, 'https://placehold.co/400x300/0a1128/00f3ff?text=Bugatti+Chiron')" class="px-4 py-2 bg-neonBlue text-black font-orbitron font-bold rounded-xl text-sm shadow-neon hover:bg-white transition-all">
+                            Comprar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mando 2 -->
+                <div class="glass-panel rounded-3xl p-6 flex flex-col justify-between group">
+                    <div>
+                        <div class="relative h-48 rounded-2xl overflow-hidden mb-4">
+                            <img src="https://placehold.co/400x300/0f172a/00f3ff?text=Lamborghini+Veneno" alt="Lamborghini Veneno" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <span class="text-xs text-neonBlue font-semibold uppercase">Edición Supercar</span>
+                        <h3 class="text-xl font-bold font-orbitron text-white mt-1">Lamborghini Veneno</h3>
+                        <p class="text-gray-300 text-xs mt-2">Chasis verde neón y negro mate con aleación de titanio en los sticks analógicos.</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-neonBlue/20 flex items-center justify-between">
+                        <span class="text-xl font-black font-orbitron text-neonBlue">279 €</span>
+                        <button onclick="addToCart('Mando Lamborghini Veneno', 279, 'https://placehold.co/400x300/0f172a/00f3ff?text=Lamborghini+Veneno')" class="px-4 py-2 bg-neonBlue text-black font-orbitron font-bold rounded-xl text-sm shadow-neon hover:bg-white transition-all">
+                            Comprar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mando 3 -->
+                <div class="glass-panel rounded-3xl p-6 flex flex-col justify-between group">
+                    <div>
+                        <div class="relative h-48 rounded-2xl overflow-hidden mb-4">
+                            <img src="https://placehold.co/400x300/0f172a/ffffff?text=Rolls-Royce+Phantom" alt="Rolls-Royce Phantom" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <span class="text-xs text-neonBlue font-semibold uppercase">Edición Elegancia</span>
+                        <h3 class="text-xl font-bold font-orbitron text-white mt-1">Rolls-Royce Phantom</h3>
+                        <p class="text-gray-300 text-xs mt-2">Cuero blanco británico con detalles chapados en oro y tacto ultra suave.</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-neonBlue/20 flex items-center justify-between">
+                        <span class="text-xl font-black font-orbitron text-neonBlue">349 €</span>
+                        <button onclick="addToCart('Mando Rolls-Royce Phantom', 349, 'https://placehold.co/400x300/0f172a/ffffff?text=Rolls-Royce+Phantom')" class="px-4 py-2 bg-neonBlue text-black font-orbitron font-bold rounded-xl text-sm shadow-neon hover:bg-white transition-all">
+                            Comprar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mando 4 -->
+                <div class="glass-panel rounded-3xl p-6 flex flex-col justify-between group">
+                    <div>
+                        <div class="relative h-48 rounded-2xl overflow-hidden mb-4">
+                            <img src="https://placehold.co/400x300/050814/00f3ff?text=Aston+Martin+Valkyrie" alt="Aston Martin Valkyrie" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <span class="text-xs text-neonBlue font-semibold uppercase">Edición Pista</span>
+                        <h3 class="text-xl font-bold font-orbitron text-white mt-1">Aston Martin Valkyrie</h3>
+                        <p class="text-gray-300 text-xs mt-2">Fibra de carbono expuesta y botones mecánicos de respuesta ultrarrápida.</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-neonBlue/20 flex items-center justify-between">
+                        <span class="text-xl font-black font-orbitron text-neonBlue">289 €</span>
+                        <button onclick="addToCart('Mando Aston Martin Valkyrie', 289, 'https://placehold.co/400x300/050814/00f3ff?text=Aston+Martin+Valkyrie')" class="px-4 py-2 bg-neonBlue text-black font-orbitron font-bold rounded-xl text-sm shadow-neon hover:bg-white transition-all">
+                            Comprar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Laptops Custom -->
+    <section id="laptops" class="py-24 px-4 max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+            <span class="text-neonBlue text-sm font-semibold uppercase tracking-widest">Portabilidad Extrema</span>
+            <h2 class="text-3xl sm:text-5xl font-black font-orbitron mt-2">LAPTOPS GAMING CUSTOM</h2>
+            <p class="text-gray-400 max-w-2xl mx-auto mt-3">Laptops de alto rendimiento equipadas con procesadores Intel Core i7 en su versión más cara y pantallas de alta tasa de refresco.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Laptop 1 -->
+            <div class="glass-panel rounded-3xl p-6 flex flex-col justify-between group">
+                <div>
+                    <div class="relative h-64 rounded-2xl overflow-hidden mb-6">
+                        <img src="https://placehold.co/600x400/0a1128/00f3ff?text=MigliTools+Titan+i7" alt="Laptop i7" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <span class="text-xs font-semibold text-neonBlue uppercase">La Versión Más Potente (i7 14th Gen)</span>
+                    <h3 class="text-2xl font-bold font-orbitron text-white mt-1">MigliTools Titan i7 Elite</h3>
+                    <p class="text-gray-300 text-sm mt-2">Chasis de aleación de aluminio y magnesio con pantalla de 240Hz y refrigeración por cámara de vapor líquida.</p>
+                    <ul class="mt-4 space-y-2 text-sm text-gray-300 border-t border-neonBlue/20 pt-4">
+                        <li><i class="fa-solid fa-microchip text-neonBlue mr-2"></i> Intel Core i7 14700HX</li>
+                        <li><i class="fa-solid fa-gamepad text-neonBlue mr-2"></i> NVIDIA RTX 4090 Laptop 16GB</li>
+                        <li><i class="fa-solid fa-desktop text-neonBlue mr-2"></i> Pantalla 17.3" QHD+ 240Hz</li>
+                    </ul>
+                </div>
+                <div class="mt-8 pt-4 border-t border-neonBlue/20 flex items-center justify-between">
+                    <div>
+                        <span class="text-xs text-gray-400 block">Precio</span>
+                        <span class="text-3xl font-black font-orbitron text-neonBlue">3.899 €</span>
+                    </div>
+                    <button onclick="addToCart('MigliTools Titan i7 Elite', 3899, 'https://placehold.co/600x400/0a1128/00f3ff?text=MigliTools+Titan+i7')" class="px-6 py-3 bg-neonBlue text-black font-orbitron font-bold rounded-xl shadow-neon hover:bg-white transition-all">
+                        Comprar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Laptop 2 -->
+            <div class="glass-panel rounded-3xl p-6 flex flex-col justify-between group">
+                <div>
+                    <div class="relative h-64 rounded-2xl overflow-hidden mb-6">
+                        <img src="https://placehold.co/600x400/0f172a/ffffff?text=MigliTools+Blade+i7" alt="Laptop i7 Slim" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <span class="text-xs font-semibold text-neonBlue uppercase">Diseño Ultra Fino</span>
+                    <h3 class="text-2xl font-bold font-orbitron text-white mt-1">MigliTools Blade i7 Stealth</h3>
+                    <p class="text-gray-300 text-sm mt-2">Potencia inigualable en un grosor de tan solo 16.9 mm. Ideal para creadores y gamers en movimiento.</p>
+                    <ul class="mt-4 space-y-2 text-sm text-gray-300 border-t border-neonBlue/20 pt-4">
+                        <li><i class="fa-solid fa-microchip text-neonBlue mr-2"></i> Intel Core i7 14650H</li>
+                        <li><i class="fa-solid fa-gamepad text-neonBlue mr-2"></i> NVIDIA RTX 4070 Laptop 8GB</li>
+                        <li><i class="fa-solid fa-desktop text-neonBlue mr-2"></i> Pantalla 15.6" OLED 165Hz</li>
+                    </ul>
+                </div>
+                <div class="mt-8 pt-4 border-t border-neonBlue/20 flex items-center justify-between">
+                    <div>
+                        <span class="text-xs text-gray-400 block">Precio</span>
+                        <span class="text-3xl font-black font-orbitron text-neonBlue">2.499 €</span>
+                    </div>
+                    <button onclick="addToCart('MigliTools Blade i7 Stealth', 2499, 'https://placehold.co/600x400/0f172a/ffffff?text=MigliTools+Blade+i7')" class="px-6 py-3 glass-panel border border-neonBlue text-neonBlue font-orbitron font-bold rounded-xl hover:bg-neonBlue hover:text-black transition-all">
+                        Comprar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reseñas de Usuarios Reales -->
+    <section id="resenas" class="py-24 px-4 bg-gradient-to-b from-neonDark via-neonDeep to-neonDark border-t border-neonBlue/20">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="text-neonBlue text-sm font-semibold uppercase tracking-widest">Testimonios Verificados</span>
+                <h2 class="text-3xl sm:text-5xl font-black font-orbitron mt-2">RESEÑAS DE CLIENTES REALES</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto mt-3">Descubre lo que dicen los jugadores que ya disfrutan del rendimiento extremo y los acabados de lujo de MigliTools.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Reseña 1 -->
+                <div class="glass-panel rounded-3xl p-8 flex flex-col justify-between relative">
+                    <div class="absolute -top-4 right-8 bg-neonBlue text-black font-bold px-3 py-1 rounded-full text-xs shadow-neon">Verificado</div>
+                    <div>
+                        <div class="flex items-center space-x-1 text-yellow-400 mb-4">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-gray-300 italic mb-6">"Compré la MigliTools Aureus Pro con detalles en oro y el rendimiento en Cyberpunk y simuladores con RTX 4090 es de otro planeta. El acabado estético impresiona en persona."</p>
+                    </div>
+                    <div class="flex items-center space-x-4 pt-4 border-t border-neonBlue/20">
+                        <img src="https://placehold.co/100x100/0a1128/00f3ff?text=CR" alt="Carlos R." class="w-12 h-12 rounded-full object-cover border border-neonBlue">
+                        <div>
+                            <h4 class="font-bold font-orbitron text-white">Carlos Ramírez</h4>
+                            <span class="text-xs text-neonBlue">Pro Gamer & Streamer</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reseña 2 -->
+                <div class="glass-panel rounded-3xl p-8 flex flex-col justify-between relative">
+                    <div class="absolute -top-4 right-8 bg-neonBlue text-black font-bold px-3 py-1 rounded-full text-xs shadow-neon">Verificado</div>
+                    <div>
+                        <div class="flex items-center space-x-1 text-yellow-400 mb-4">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-gray-300 italic mb-6">"El mando Bugatti Chiron es una auténtica obra de arte. Los materiales se sienten como un coche de lujo en tus manos y la respuesta en shooters competitivos es perfecta."</p>
+                    </div>
+                    <div class="flex items-center space-x-4 pt-4 border-t border-neonBlue/20">
+                        <img src="https://placehold.co/100x100/0f172a/00f3ff?text=LM" alt="Lucía M." class="w-12 h-12 rounded-full object-cover border border-neonBlue">
+                        <div>
+                            <h4 class="font-bold font-orbitron text-white">Lucía Mendoza</h4>
+                            <span class="text-xs text-neonBlue">Creadora de Contenido</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reseña 3 -->
+                <div class="glass-panel rounded-3xl p-8 flex flex-col justify-between relative">
+                    <div class="absolute -top-4 right-8 bg-neonBlue text-black font-bold px-3 py-1 rounded-full text-xs shadow-neon">Verificado</div>
+                    <div>
+                        <div class="flex items-center space-x-1 text-yellow-400 mb-4">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-gray-300 italic mb-6">"Utilicé el configurador para montar mi equipo con 128GB de RAM y llegó a casa perfectamente empaquetado en menos de 48 horas. Atención al cliente impecable."</p>
+                    </div>
+                    <div class="flex items-center space-x-4 pt-4 border-t border-neonBlue/20">
+                        <img src="https://placehold.co/100x100/050814/00f3ff?text=AG" alt="Alejandro G." class="w-12 h-12 rounded-full object-cover border border-neonBlue">
+                        <div>
+                            <h4 class="font-bold font-orbitron text-white">Alejandro Gómez</h4>
+                            <span class="text-xs text-neonBlue">Ingeniero de Software</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="glass-panel border-t border-neonBlue/30 py-12 px-4">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            <div class="space-y-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-lg bg-neonBlue flex items-center justify-center text-black">
+                        <i class="fa-solid fa-microchip font-bold"></i>
+                    </div>
+                    <span class="text-xl font-black font-orbitron tracking-wider text-white">MIGLI<span class="text-neonBlue">TOOLS</span></span>
+                </div>
+                <p class="text-gray-400 text-sm">Hardware de lujo y máximo rendimiento para entusiastas del gaming y profesionales exigentes.</p>
+            </div>
+            <div>
+                <h4 class="font-orbitron font-bold text-neonBlue mb-4">Navegación</h4>
+                <ul class="space-y-2 text-sm text-gray-400">
+                    <li><a href="#pcs" class="hover:text-neonBlue transition-colors">PCs Gaming</a></li>
+                    <li><a href="#configurador" class="hover:text-neonBlue transition-colors">Configurador</a></li>
+                    <li><a href="#ps5" class="hover:text-neonBlue transition-colors">PS5 Custom</a></li>
+                    <li><a href="#mandos" class="hover:text-neonBlue transition-colors">Mandos Lujo</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-orbitron font-bold text-neonBlue mb-4">Legal & Soporte</h4>
+                <ul class="space-y-2 text-sm text-gray-400">
+                    <li><a href="#" class="hover:text-neonBlue transition-colors">Garantía VIP 5 Años</a></li>
+                    <li><a href="#" class="hover:text-neonBlue transition-colors">Envíos Asegurados Oro</a></li>
+                    <li><a href="#" class="hover:text-neonBlue transition-colors">Términos y Condiciones</a></li>
+                    <li><a href="#" class="hover:text-neonBlue transition-colors">Política de Privacidad</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-orbitron font-bold text-neonBlue mb-4">Boletín Exclusivo</h4>
+                <p class="text-gray-400 text-sm mb-4">Suscríbete para recibir acceso anticipado a ediciones limitadas de diamante y oro.</p>
+                <div class="flex">
+                    <input type="email" placeholder="Tu email..." class="bg-neonDark border border-neonBlue/40 px-4 py-2 rounded-l-xl text-sm text-white focus:outline-none focus:border-neonBlue w-full">
+                    <button onclick="subscribeNewsletter()" class="bg-neonBlue text-black px-4 py-2 rounded-r-xl font-bold text-sm hover:bg-white transition-all">OK</button>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto pt-8 border-t border-neonBlue/20 text-center text-xs text-gray-500">
+            &copy; 2026 MigliTools. Todos los derechos reservados. Diseñado con estética futurista azul neón y blanco.
+        </div>
+    </footer>
+
+    <!-- Carrito de Compras (Modal Lateral) -->
+    <div id="cart-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex justify-end transition-opacity duration-300">
+        <div class="w-full max-w-md glass-panel h-full flex flex-col justify-between border-l border-neonBlue/40 p-6 shadow-2xl transform transition-transform duration-300">
+            <div>
+                <div class="flex items-center justify-between pb-4 border-b border-neonBlue/20">
+                    <h3 class="text-xl font-bold font-orbitron text-white flex items-center space-x-2">
+                        <i class="fa-solid fa-cart-shopping text-neonBlue"></i>
+                        <span>Tu Carrito VIP</span>
+                    </h3>
+                    <button onclick="toggleCart()" class="text-gray-400 hover:text-white p-2">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
+                </div>
+
+                <!-- Lista de Items -->
+                <div id="cart-items" class="space-y-4 py-6 overflow-y-auto max-h-[60vh]">
+                    <p class="text-gray-400 text-center py-8">Tu carrito está vacío.</p>
+                </div>
+            </div>
+
+            <div class="border-t border-neonBlue/20 pt-4 space-y-4">
+                <div class="flex justify-between items-center text-lg font-bold">
+                    <span class="text-gray-300">Total:</span>
+                    <span id="cart-total" class="text-2xl font-black font-orbitron text-neonBlue">0 €</span>
+                </div>
+                <button onclick="checkout()" class="w-full py-4 bg-neonBlue text-black font-orbitron font-bold rounded-xl shadow-neon hover:bg-white transition-all">
+                    Tramitar Pedido Seguro
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Notificación / Mensaje Personalizado (Sin usar alert) -->
+    <div id="notification-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-panel rounded-3xl p-8 max-w-md w-full border border-neonBlue text-center space-y-6 shadow-neon-lg">
+            <div class="w-16 h-16 bg-neonBlue/20 rounded-full flex items-center justify-center mx-auto text-neonBlue text-3xl neon-border">
+                <i id="notification-icon" class="fa-solid fa-check"></i>
+            </div>
+            <h3 id="notification-title" class="text-2xl font-bold font-orbitron text-white">¡Aviso Exclusivo!</h3>
+            <p id="notification-message" class="text-gray-300 text-sm">Mensaje de prueba.</p>
+            <button onclick="closeNotification()" class="w-full py-3 bg-neonBlue text-black font-orbitron font-bold rounded-xl shadow-neon hover:bg-white transition-all">
+                Entendido
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Estado del Carrito
+        let cart = [];
+
+        // Toggle Menú Móvil
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Toggle Carrito
+        function toggleCart() {
+            const modal = document.getElementById('cart-modal');
+            modal.classList.toggle('hidden');
+        }
+
+        // Mostrar Notificación personalizada (Evitando alert)
+        function showNotification(title, message, icon = 'fa-check') {
+            document.getElementById('notification-title').innerText = title;
+            document.getElementById('notification-message').innerText = message;
+            document.getElementById('notification-icon').className = `fa-solid ${icon}`;
+            document.getElementById('notification-modal').classList.remove('hidden');
+        }
+
+        function closeNotification() {
+            document.getElementById('notification-modal').classList.add('hidden');
+        }
+
+        // Añadir al Carrito
+        function addToCart(name, price, image) {
+            const existingItem = cart.find(item => item.name === name);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ name, price, image, quantity: 1 });
+            }
+            updateCartUI();
+            showNotification('¡Artículo Añadido!', `${name} se ha añadido correctamente a tu carrito VIP.`, 'fa-cart-shopping');
+        }
+
+        // Actualizar UI del Carrito
+        function updateCartUI() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartCount = document.getElementById('cart-count');
+            const cartTotal = document.getElementById('cart-total');
+
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.innerText = totalItems;
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p class="text-gray-400 text-center py-8">Tu carrito está vacío.</p>';
+                cartTotal.innerText = '0 €';
+                return;
+            }
+
+            let html = '';
+            let total = 0;
+
+            cart.forEach((item, index) => {
+                total += item.price * item.quantity;
+                html += `
+                    <div class="flex items-center justify-between glass-panel p-3 rounded-2xl border border-neonBlue/20">
+                        <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-xl border border-neonBlue/30">
+                        <div class="flex-1 px-3">
+                            <h4 class="font-bold font-orbitron text-sm text-white">${item.name}</h4>
+                            <span class="text-xs text-neonBlue">${item.price.toLocaleString()} € x ${item.quantity}</span>
+                        </div>
+                        <button onclick="removeFromCart(${index})" class="text-red-400 hover:text-red-300 p-2">
+                            <i class="fa-solid fa-trash text-sm"></i>
+                        </button>
+                    </div>
+                `;
+            });
+
+            cartItemsContainer.innerHTML = html;
+            cartTotal.innerText = total.toLocaleString() + ' €';
+        }
+
+        // Eliminar del Carrito
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        // Tramitar Pedido
+        function checkout() {
+            if (cart.length === 0) {
+                showNotification('Carrito Vacío', 'Añade al menos un producto antes de tramitar el pedido.', 'fa-triangle-exclamation');
+                return;
+            }
+            showNotification('¡Pedido Realizado con Éxito!', 'Gracias por confiar en MigliTools. Tu equipo exclusivo de gama alta está siendo ensamblado por nuestros maestros artesanos.', 'fa-shield-halved');
+            cart = [];
+            updateCartUI();
+            toggleCart();
+        }
+
+        // Actualizar Precio del Configurador Interactivo
+        function updateConfigPrice() {
+            const cpuRadio = document.querySelector('input[name="cpu"]:checked');
+            const gpuRadio = document.querySelector('input[name="gpu"]:checked');
+            const ramRadio = document.querySelector('input[name="ram"]:checked');
+            const extraCheckboxes = document.querySelectorAll('input[name="extra"]:checked');
+
+            let cpuPrice = parseInt(cpuRadio.value);
+            let gpuPrice = parseInt(gpuRadio.value);
+            let ramPrice = parseInt(ramRadio.value);
+
+            let cpuName = cpuRadio.getAttribute('data-name');
+            let gpuName = gpuRadio.getAttribute('data-name');
+            let ramName = ramRadio.getAttribute('data-name');
+
+            let extrasTotal = 0;
+            let extrasNames = [];
+
+            extraCheckboxes.forEach(cb => {
+                extrasTotal += parseInt(cb.value);
+                extrasNames.push(cb.getAttribute('data-name'));
+            });
+
+            const total = cpuPrice + gpuPrice + ramPrice + extrasTotal;
+
+            // Actualizar resumen visual
+            document.getElementById('summary-cpu').innerText = cpuName;
+            document.getElementById('summary-gpu').innerText = gpuName;
+            document.getElementById('summary-ram').innerText = ramName;
+            document.getElementById('summary-extras').innerText = extrasNames.length > 0 ? extrasNames.join(', ') : 'Ninguno';
+            document.getElementById('config-total').innerText = total.toLocaleString() + ' €';
+        }
+
+        // Añadir PC Configurado al Carrito
+        function addCustomToCart() {
+            const cpuName = document.getElementById('summary-cpu').innerText;
+            const gpuName = document.getElementById('summary-gpu').innerText;
+            const ramName = document.getElementById('summary-ram').innerText;
+            const extrasName = document.getElementById('summary-extras').innerText;
+            const totalPrice = parseInt(document.getElementById('config-total').innerText.replace(/\./g, '').replace(' €', ''));
+
+            const customName = `PC Custom: ${cpuName} + ${gpuName}`;
+            addToCart(customName, totalPrice, 'https://placehold.co/600x400/0a1128/00f3ff?text=Custom+Build+VIP');
+        }
+
+        // Boletín
+        function subscribeNewsletter() {
+            showNotification('¡Suscripción Exitosa!', 'Te has unido al club VIP de MigliTools. Pronto recibirás ofertas exclusivas.', 'fa-envelope');
+        }
+
+        // Inicializar
+        window.onload = function() {
+            updateConfigPrice();
+        };
+    </script>
+</body>
+</html>
